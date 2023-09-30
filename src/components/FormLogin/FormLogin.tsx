@@ -1,10 +1,11 @@
 
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { authContext } from '@/contexts/AuthContext/auth';
 
 
 const loginFormSchema = z.object({
@@ -15,6 +16,7 @@ const loginFormSchema = z.object({
 const FormLogin = () => {
     const [apiErrorMsg, setApiErrorMsg] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
+    const {setIsLoggedIn}  = useContext(authContext)
    const navigate =  useNavigate()
 
    
@@ -30,6 +32,8 @@ const FormLogin = () => {
             const response = await axios.post("https://ecommerce.routemisr.com/api/v1/auth/signin", data)
             console.log(response.data)
             setIsLoading(false)
+            setIsLoggedIn(true)
+            localStorage.setItem("token", response.data.token)
             navigate('/')
 
         } catch (error) {

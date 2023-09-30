@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { NavLink, Link } from 'react-router-dom';
+import { useState, useContext } from 'react'
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { BsInstagram } from "react-icons/bs";
 import { BsFacebook } from "react-icons/bs";
 import { BsTwitter } from "react-icons/bs";
@@ -7,11 +7,13 @@ import { BsLinkedin } from "react-icons/bs";
 import { BsTiktok } from "react-icons/bs";
 import { BsYoutube } from "react-icons/bs";
 import { Page } from '@/types/Page';
+import { authContext } from '@/contexts/AuthContext/auth';
 
 const Header = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const {isLoggedIn, setIsLoggedIn} = useContext(authContext)
     const [menuHandler, setMenuHandler] = useState(true)
     const [mdOptions, setMdOptions] = useState(true)
+    const navigate = useNavigate()
     // const [search, setSearch] = useState(true)
 
     const pages : Page[] = [
@@ -32,7 +34,9 @@ const Header = () => {
     //     setSearch(!search)
     // }
     const logout = () => {
-        console.log('logout');
+        setIsLoggedIn(false);
+        localStorage.removeItem("token")
+        navigate('/')
     }
 
     return (
