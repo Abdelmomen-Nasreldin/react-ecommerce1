@@ -6,14 +6,15 @@ import { BsTwitter } from "react-icons/bs";
 import { BsLinkedin } from "react-icons/bs";
 import { BsTiktok } from "react-icons/bs";
 import { BsYoutube } from "react-icons/bs";
+import { Page } from '@/types/Page';
 
 const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [menuHandler, setMenuHandler] = useState(true)
     const [mdOptions, setMdOptions] = useState(true)
-    const [search, setSearch] = useState(true)
+    // const [search, setSearch] = useState(true)
 
-    const pages = [
+    const pages : Page[] = [
         { title: 'home', path: '/' },
         { title: 'cart', path: '/cart' },
         { title: 'products', path: '/products' },
@@ -27,9 +28,9 @@ const Header = () => {
     const mdOptionsToggle = () => {
         setMdOptions(!mdOptions)
     }
-    const searchToggle = () => {
-        setSearch(!search)
-    }
+    // const searchToggle = () => {
+    //     setSearch(!search)
+    // }
     const logout = () => {
         console.log('logout');
     }
