@@ -13,7 +13,7 @@ import NotFound from "./pages/NotFound/NotFound";
 
 function App() {
   const router = createBrowserRouter([
-    {
+    { 
       path: "", element: <MainLayout />, children: [
         { path: "", element: <Home />, },
         { path: "home", element: <Navigate to={'/'} /> },
