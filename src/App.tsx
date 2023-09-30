@@ -9,6 +9,7 @@ import Categories from "./pages/Categories/Categories";
 import Brands from "./pages/Brands/Brands";
 import Cart from "./pages/Cart/Cart";
 import ProductDetails from './pages/ProductDetails/productDetails';
+import NotFound from "./pages/NotFound/NotFound";
 
 function App() {
   const router = createBrowserRouter([
@@ -19,11 +20,11 @@ function App() {
         { path: "login", element: <Login /> },
         { path: "register", element: <Register /> },
         { path: "products", element: <Products /> },
-        { path: "productDetails", element: <ProductDetails /> },
+        { path: "productDetails/:id", element: <ProductDetails /> },
         { path: "categories", element: <Categories /> },
         { path: "brands", element: <Brands /> },
         { path: "cart", element: <Cart /> },
-        { path: "*", element: <Cart /> },
+        { path: "*", element: <NotFound /> },
       ],
     },
   ]);
