@@ -6,20 +6,22 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { authContext } from '@/contexts/AuthContext/auth';
+// import { useSignIn } from 'react-auth-kit'
 
 
 const loginFormSchema = z.object({
-    email: z.string({required_error: "required"}).trim().email(),
-    password: z.string({required_error: "required"}).trim().min(6)
+    email: z.string({ required_error: "required" }).trim().email(),
+    password: z.string({ required_error: "required" }).trim().min(6)
 })
 
 const FormLogin = () => {
     const [apiErrorMsg, setApiErrorMsg] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
+    // const signIn = useSignIn()
     const {setIsLoggedIn}  = useContext(authContext)
-   const navigate =  useNavigate()
+    const navigate = useNavigate()
 
-   
+
     type formLoginSchema = z.infer<typeof loginFormSchema>;
     const { register, handleSubmit, formState: { errors } } = useForm<formLoginSchema>({
         resolver: zodResolver(loginFormSchema)
@@ -29,20 +31,30 @@ const FormLogin = () => {
         setApiErrorMsg(null)
         setIsLoading(true)
         try {
-            const response = await axios.post("https://ecommerce.routemisr.com/api/v1/auth/signin", data)
-            console.log(response.data)
+            const res = await axios.post("https://ecommerce.routemisr.com/api/v1/auth/signin", data)
+            console.log(res.data)
             setIsLoading(false)
             setIsLoggedIn(true)
-            localStorage.setItem("token", response.data.token)
+            // signIn(
+            //     {
+            //         token: res.data.token,
+            //         expiresIn: res.data.expiresIn,
+            //         tokenType: "Bearer",
+            //         authState: res.data.authUserState,
+            //     }
+            // )
             navigate('/')
 
-        } catch (error) {
+            // localStorage.setItem("token", response.data.token)
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
             console.log(error);
             console.log(error?.response?.data.message);
             if (error?.message == 'Network Error') {
                 setApiErrorMsg(error.message)
             }
-            
+
             setApiErrorMsg(error?.response?.data.message)
             setIsLoading(false)
         }

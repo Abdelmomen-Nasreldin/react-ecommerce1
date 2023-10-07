@@ -9,7 +9,7 @@ const ProtectedRoutes = ({children} : {children: ReactNode}) => {
         return children
     }
 
-    return <Navigate to={'/'} />
+    return <Navigate to={'/login'} />
 }
 
 export default ProtectedRoutes

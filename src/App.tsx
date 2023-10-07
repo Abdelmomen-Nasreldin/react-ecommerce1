@@ -12,7 +12,9 @@ import ProductDetails from './pages/ProductDetails/productDetails';
 import NotFound from "./pages/NotFound/NotFound";
 import AuthProvider from "./contexts/AuthContext/auth";
 import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+const queryClient = new QueryClient();
 function App() {
   const router = createBrowserRouter([
     {
@@ -41,7 +43,9 @@ function App() {
 
   return <>
     <AuthProvider>
+    <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
+      </QueryClientProvider>
     </AuthProvider>
   </>;
 }

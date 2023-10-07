@@ -1,8 +1,10 @@
 import React, { ReactNode, createContext, useState } from "react";
+
 type AuthContextType = {
     isLoggedIn: boolean;
     setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
 export const authContext = createContext<AuthContextType>({
     isLoggedIn: false,
     setIsLoggedIn: ()=>{}
@@ -16,4 +18,5 @@ export const authContext = createContext<AuthContextType>({
     </authContext.Provider>
     )
 }
+
 export default AuthProvider;
