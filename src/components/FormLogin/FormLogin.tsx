@@ -5,7 +5,7 @@ import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { authContext } from '@/contexts/AuthContext/auth';
+import { AuthContext } from '@/contexts/AuthContext/auth';
 // import { useSignIn } from 'react-auth-kit'
 
 
@@ -18,7 +18,7 @@ const FormLogin = () => {
     const [apiErrorMsg, setApiErrorMsg] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     // const signIn = useSignIn()
-    const {setIsLoggedIn}  = useContext(authContext)
+    const {login}  = useContext(AuthContext)
     const navigate = useNavigate()
 
 
@@ -34,18 +34,8 @@ const FormLogin = () => {
             const res = await axios.post("https://ecommerce.routemisr.com/api/v1/auth/signin", data)
             console.log(res.data)
             setIsLoading(false)
-            setIsLoggedIn(true)
-            // signIn(
-            //     {
-            //         token: res.data.token,
-            //         expiresIn: res.data.expiresIn,
-            //         tokenType: "Bearer",
-            //         authState: res.data.authUserState,
-            //     }
-            // )
+            login(res.data.token)
             navigate('/')
-
-            // localStorage.setItem("token", response.data.token)
 
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {

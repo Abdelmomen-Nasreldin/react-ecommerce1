@@ -7,14 +7,13 @@ import { BsLinkedin } from "react-icons/bs";
 import { BsTiktok } from "react-icons/bs";
 import { BsYoutube } from "react-icons/bs";
 import { Page } from '@/types/Page';
-import { authContext } from '@/contexts/AuthContext/auth';
+import { AuthContext } from '@/contexts/AuthContext/auth';
 
 const Header = () => {
-    const {isLoggedIn, setIsLoggedIn} = useContext(authContext)
+    const { isLoggedIn,  logout : onLogout } = useContext(AuthContext)
     const [menuHandler, setMenuHandler] = useState(true)
     const [mdOptions, setMdOptions] = useState(true)
     const navigate = useNavigate()
-    // const [search, setSearch] = useState(true)
 
     const pages : Page[] = [
         { title: 'home', path: '/' },
@@ -23,19 +22,15 @@ const Header = () => {
         { title: 'categories', path: '/categories' },
         { title: 'brands', path: '/brands' },
     ]
-
+    
     const menuHandlerBtn = () => {
         setMenuHandler(!menuHandler)
     }
     const mdOptionsToggle = () => {
         setMdOptions(!mdOptions)
     }
-    // const searchToggle = () => {
-    //     setSearch(!search)
-    // }
     const logout = () => {
-        setIsLoggedIn(false);
-        localStorage.removeItem("token")
+        onLogout()
         navigate('/')
     }
 
