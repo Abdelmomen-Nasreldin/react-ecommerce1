@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '@/contexts/AuthContext/auth';
 // import { useSignIn } from 'react-auth-kit'
+import Loading from '@/components/Loading/Loading';
 
 
 const loginFormSchema = z.object({
@@ -17,7 +18,6 @@ const loginFormSchema = z.object({
 const FormLogin = () => {
     const [apiErrorMsg, setApiErrorMsg] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
-    // const signIn = useSignIn()
     const {login}  = useContext(AuthContext)
     const navigate = useNavigate()
 
@@ -121,7 +121,7 @@ const FormLogin = () => {
                             }
                             {
                                 isLoading &&
-                                <span>loading...</span>
+                                <Loading />
                             }
                         </button>
                     </div>

@@ -1,13 +1,14 @@
 import { useFetch } from '@/hooks/useFetch';
 import { Product } from '@/types/product'
 import { useParams } from 'react-router-dom'
+import Loading from '@/components/Loading/Loading';
 
 const ProductDetails = () => {
     const {id} = useParams();
     const { data : product, isLoading, isError, error } = useFetch<Product>('api/v1/products/' + id)
 
     if (isLoading) {
-        return <span>Loading...</span>;
+        return <Loading />;
       }
     
       if (isError && error) {

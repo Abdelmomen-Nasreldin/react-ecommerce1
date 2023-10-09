@@ -1,11 +1,13 @@
 import { useFetch } from "@/hooks/useFetch"
 import { Product  as IProduct} from '@/types/product'
 import Product from "../Product/Product";
+import Loading from '@/components/Loading/Loading';
+
 const ProductList = () => {
     const { data, isLoading, isError, error } = useFetch<IProduct[]>('api/v1/products')
 
     if (isLoading) {
-        return <span>Loading...</span>;
+        return <Loading />;
       }
     
       if (isError && error) {
