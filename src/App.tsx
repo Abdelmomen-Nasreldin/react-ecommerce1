@@ -10,7 +10,11 @@ import Brands from "./pages/Brands/Brands";
 import Cart from "./pages/Cart/Cart";
 import ProductDetails from './pages/ProductDetails/productDetails';
 import NotFound from "./pages/NotFound/NotFound";
+import AuthProvider from "./contexts/AuthContext/auth";
+import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+const queryClient = new QueryClient();
 function App() {
   const router = createBrowserRouter([
     {
@@ -22,14 +26,27 @@ function App() {
         { path: "products", element: <Products /> },
         { path: "productDetails/:id", element: <ProductDetails /> },
         { path: "categories", element: <Categories /> },
-        { path: "brands", element: <Brands /> },
-        { path: "cart", element: <Cart /> },
+        {
+          path: "brands", element: <ProtectedRoutes>
+            <Brands />
+          </ProtectedRoutes>
+        },
+        {
+          path: "cart", element: <ProtectedRoutes>
+            <Cart />
+          </ProtectedRoutes>
+        },
         { path: "*", element: <NotFound /> },
       ],
     },
   ]);
+
   return <>
-    <RouterProvider router={router} />
+    <AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+      </QueryClientProvider>
+    </AuthProvider>
   </>;
 }
 
