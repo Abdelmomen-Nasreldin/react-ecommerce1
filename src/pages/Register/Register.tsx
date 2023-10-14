@@ -8,25 +8,37 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '@/contexts/AuthContext/auth';
 import Loading from '@/components/Loading/Loading';
 
+
 const registerFormSchema = z.object({
-    name: z.string({ required_error: "required" }),
-    email: z.string({ required_error: "required" }).trim().email(),
-    password: z.string({ required_error: "required" }).trim().min(6),
-    rePassword: z.string({ required_error: "required" }).trim().min(6),
-    phone: z.string().min(11)
+    name: z.string().nonempty({ message: 'Name is required' }),
+    email: z.string().email({ message: 'Invalid email address' }),
+    password: z.string().min(6, { message: 'Password must be at least 6 characters long' }),
+    rePassword: z.string().min(6, { message: 'Password must be at least 6 characters long' }),
+    phone: z.string().min(6, { message: 'phone must be 11 characters long' }),
 })
+.refine((data) => data.password === data.rePassword, {
+    message: "Passwords don't match",
+    path: ["rePassword"]
+})
+
 
 const Register = () => {
     const [apiErrorMsg, setApiErrorMsg] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
-    const {login}  = useContext(AuthContext)
+    const { login } = useContext(AuthContext)
     const navigate = useNavigate()
 
+    const { register, handleSubmit, formState: { errors } } = useForm<formLoginSchema>({
+        resolver: zodResolver(registerFormSchema),
+        mode: 'onBlur'
+    });
+
+    // if (isLoggedIn) {
+    //     navigate('/')
+    // }
 
     type formLoginSchema = z.infer<typeof registerFormSchema>;
-    const { register, handleSubmit, formState: { errors } } = useForm<formLoginSchema>({
-        resolver: zodResolver(registerFormSchema)
-    });
+
 
     const onSubmit: SubmitHandler<formLoginSchema> = async (data) => {
         setApiErrorMsg(null)
@@ -50,6 +62,8 @@ const Register = () => {
             setIsLoading(false)
         }
     }
+
+
     return (
         <section className="relative ">
             <div className="container mx-auto px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
@@ -86,7 +100,7 @@ const Register = () => {
                             </span>
                         </div>
                         {/* error  */}
-                        {errors.name?.message && <p className='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-3'>{errors.name?.message}</p>}
+                        {errors.name && <p className='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-3'>{errors.name?.message}</p>}
                     </div>
                     {/* Email  */}
                     <div>
@@ -182,16 +196,23 @@ const Register = () => {
 
 
                     <div className="flex items-center justify-center">
-                        <button type="submit"
-                            className=" w-full rounded-lg bg-[#08ac0a] px-5 py-3 text-sm font-medium text-white">
-                            {!isLoading &&
+                        {!isLoading &&
+                            <button type="submit"
+                                className=" w-full rounded-lg bg-[#08ac0a] px-5 py-3 text-sm font-medium text-white">
+
                                 <span> Sign up</span>
-                            }
-                            {
-                                isLoading &&
+
+                            </button>
+                        }
+                        {
+                            isLoading &&
+                            <button type="button"
+                                className=" w-full rounded-lg  px-5 py-3 text-sm font-medium text-white">
+
+
                                 <Loading />
-                            }
-                        </button>
+                            </button>
+                        }
                     </div>
                 </form >
             </div >

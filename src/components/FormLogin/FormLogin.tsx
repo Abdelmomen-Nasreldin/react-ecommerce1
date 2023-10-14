@@ -6,25 +6,25 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '@/contexts/AuthContext/auth';
-// import { useSignIn } from 'react-auth-kit'
 import Loading from '@/components/Loading/Loading';
 
 
 const loginFormSchema = z.object({
-    email: z.string({ required_error: "required" }).trim().email(),
-    password: z.string({ required_error: "required" }).trim().min(6)
+    email: z.string().trim().email(),
+    password: z.string().trim().min(6)
 })
 
 const FormLogin = () => {
     const [apiErrorMsg, setApiErrorMsg] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
-    const {login}  = useContext(AuthContext)
+    const { login } = useContext(AuthContext)
     const navigate = useNavigate()
 
 
     type formLoginSchema = z.infer<typeof loginFormSchema>;
     const { register, handleSubmit, formState: { errors } } = useForm<formLoginSchema>({
-        resolver: zodResolver(loginFormSchema)
+        resolver: zodResolver(loginFormSchema),
+        mode: 'onBlur'
     });
 
     const onSubmit: SubmitHandler<formLoginSchema> = async (data) => {
@@ -114,16 +114,23 @@ const FormLogin = () => {
 
 
                     <div className="flex items-center justify-center">
-                        <button type="submit"
-                            className=" w-full rounded-lg bg-[#08ac0a] px-5 py-3 text-sm font-medium text-white">
-                            {!isLoading &&
+                        {!isLoading &&
+                            <button type="submit"
+                                className=" w-full rounded-lg bg-[#08ac0a] px-5 py-3 text-sm font-medium text-white">
+
                                 <span> Sign in</span>
-                            }
-                            {
-                                isLoading &&
+
+                            </button>
+                        }
+                        {
+                            isLoading &&
+                            <button type="button"
+                                className=" w-full rounded-lg  px-5 py-3 text-sm font-medium text-white">
+
+
                                 <Loading />
-                            }
-                        </button>
+                            </button>
+                        }
                     </div>
                 </form >
             </div >

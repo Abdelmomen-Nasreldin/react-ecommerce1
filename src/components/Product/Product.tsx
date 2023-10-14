@@ -1,16 +1,38 @@
 import { Product as IProduct } from '@/types/product'
 import './Product.scss'
 import { useNavigate } from 'react-router-dom'
+import axios, { AxiosResponse } from 'axios';
+import Cookies from 'js-cookie';
+import { CartContext } from '@/contexts/AuthContext/cart';
+import { useContext } from 'react';
+const baseURL = "https://ecommerce.routemisr.com";
+
+
 const Product = ({ product }: { product: IProduct }) => {
+    const { setCartItems } = useContext(CartContext)
+
     const navigate = useNavigate()
-    const addToCart = ()=>{}
-    const goToDetails = (id : string)=>{
+    const addToCart = (productId: string) => {
+        fetchPost('api/v1/cart', {productId: productId})
+    }
+    const fetchPost = async (endPoint: string, data: any) => {
+        const authToken = Cookies.get("token") as string;
+        const response: AxiosResponse = await axios.post(`${baseURL}/${endPoint}`, data, {
+            headers: {
+                token: authToken,
+            },
+        });
+        console.log(response.data);
+        setCartItems(response.data.data.products.length)
+        return response.data.data;
+    };
+    const goToDetails = (id: string) => {
         navigate(`/productDetails/${id}`)
     }
     return (
         <>
             <div className={`product relative overflow-hidden bg-[#f7f7f761] flex-[0_1_300px]`}>
-                <div className='cursor-pointer' onClick={()=>goToDetails(product.id)}>
+                <div className='cursor-pointer' onClick={() => goToDetails(product.id)}>
                     <a className="block relative rounded " data-ur1313m3t="true">
                         <img alt="ecommerce" className="object-cover object-center w-full h-full block" src={product.imageCover} />
                     </a>
@@ -31,7 +53,7 @@ const Product = ({ product }: { product: IProduct }) => {
                     </div>
                 </div>
                 <div className="description w-full absolute bottom-0 left-0 translate-y-full transition-all duration-700">
-                    <button className='bg-main text-white w-full p-2 rounded' onClick={addToCart}>Add To Cart</button>
+                    <button className='bg-main text-white w-full p-2 rounded' onClick={() => addToCart(product.id)}>Add To Cart</button>
                 </div>
             </div>
 

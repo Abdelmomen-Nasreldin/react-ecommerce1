@@ -1,6 +1,5 @@
 import { useFetch } from '@/hooks/useFetch'
 import { Category } from '@/types/category'
-import React from 'react'
 
 const Categories = () => {
   const { data, isLoading, isError, error } = useFetch<Category[]>('api/v1/categories')
